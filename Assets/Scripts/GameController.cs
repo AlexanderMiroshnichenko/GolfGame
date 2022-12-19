@@ -7,146 +7,66 @@ namespace Game
 	public class GameController : MonoBehaviour
 	{
 		[SerializeField]
-		public StoneSpawner m_stoneSpawner;
-
+		private UIScorePanel m_scorePanel;
 		[SerializeField]
-		public UIScorePanel m_scorePanel;
+		private CameraController m_cameraController;
 
-		[SerializeField]
-		public GameSettings m_settings;
+		private int m_score = 0;
+		private int m_maxScore = 0;
 
-		[SerializeField]
-		public GameObject[] m_UIObjects;
+		public int maxScore => m_maxScore;
+		public int score => m_score;
 
+		[SerializeField] private MainMenuState m_mainMenuState;
+		[SerializeField] private GameState m_gameState;
 
 		public bool isLosed;
 
-
-		private List<GameObject> m_stones = new();
-		private int m_score = 0;
-		private int m_maxScore = 0;
-		private float m_timer = 0f;
-		private float m_delay = 0f;
-		private float m_maxDelay = 0f;
-		
-
 		private void Start()
 		{
-			SetMainMenuState();
+			MainMenuState();
 		}
 
-		public void SetMainMenuState()
+		private void MainMenuState()
 		{
-			ClearStones();
-			enabled = false;
-			foreach(GameObject uiElement in m_UIObjects)
-            {
-                if (uiElement.tag == "MainMenu")
-                {
-					uiElement.SetActive(true);
-                }
-				else uiElement.SetActive(false);
-			}
-			RefreshScore(m_maxScore);
+			m_mainMenuState.enabled = true;
+			m_gameState.enabled = false;
 		}
 
-		private float CalcNextDelay()
+		private void GameState()
 		{
-			var delay = Random.Range(m_settings.minDelay, m_maxDelay);
-			//Debug.Log($"CalcNextDelay - delay: {delay} - maxDelay: {m_maxDelay}");
-			return delay;
+			m_mainMenuState.enabled = false;
+			m_gameState.enabled = true;
 		}
 
-		public void SetGameState()
+		public void StartGame()
 		{
-			m_delay = CalcNextDelay();
-			m_maxDelay = m_settings.maxDelay;
-			foreach (GameObject uiElement in m_UIObjects)
-			{
-				if (uiElement.tag == "Game")
-				{
-					uiElement.SetActive(true);
-				}
-				else uiElement.SetActive(false);
-			}
-			enabled = true;
-			m_score = 0;
-			RefreshScore(m_score);
-			StartGame();
-		}
-
-		private void StartGame()
-		{
-			GameEvents.onGameOver += OnGameOver;
 			isLosed = false;
+			GameState();
+			m_cameraController.m_animator.SetTrigger("GameStarted");
 		}
 
-		private void OnGameOver()
+		public void GameOver()
 		{
-			GameEvents.onGameOver -= OnGameOver;
-			Debug.Log("Game Over");
 			isLosed = true;
-			SetMainMenuState();
+			MainMenuState();
+			m_cameraController.m_animator.SetTrigger("GameEnded");
 		}
 
-		private void ClearStones()
+		public void IncScore()
 		{
-			foreach (GameObject stone in m_stones)
-			{
-				Destroy(stone);
-			}
-			m_stones.Clear();
+			m_score++;
+			m_maxScore = Mathf.Max(m_score, m_maxScore);
 		}
 
-		private void Update()
+		public void ResetScore()
 		{
-			m_timer += Time.deltaTime;
-			if (m_timer >= m_delay)
-            {
-                var stone = m_stoneSpawner.Spawn();
-                m_stones.Add(stone);
-                m_timer -= m_delay;
-                m_delay = CalcNextDelay();
-                CalcMaxDelay();
-            }
-        }
+			m_score = 0;
+		}
 
-        private void CalcMaxDelay()
-        {
-            if (m_maxDelay <= 0.25)
-                m_maxDelay = 0.25f;
-            else
-                m_maxDelay -= m_settings.stepDelay;
-        }
-
-        public void RefreshScore(int score)
+		public void RefreshScore(int score)
 		{
 			m_scorePanel.SetScore(score);
-		}
-
-		public void OnCollisionStone(Collision collision)
-		{
-			if (collision.gameObject.TryGetComponent<Stone>(out var stone))
-			{
-				stone.SetAffect(false);
-				var contact = collision.contacts[0];
-
-				var stick = contact.thisCollider.GetComponent<Stick>();
-				
-				var body = stone.GetComponent<Rigidbody>();
-				body.AddForce(stick.dir * m_settings.power, ForceMode.Impulse);
-
-				m_score++;
-				m_maxScore = Mathf.Max(m_score, m_maxScore);
-				RefreshScore(m_score);
-
-				Physics.IgnoreCollision(contact.thisCollider, contact.otherCollider, true);
-			}
-		}
-
-		private void OnDestroy()
-		{
-			GameEvents.onGameOver -= OnGameOver;
 		}
 	}
 }

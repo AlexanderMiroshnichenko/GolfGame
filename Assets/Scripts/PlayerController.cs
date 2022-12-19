@@ -14,7 +14,7 @@ namespace Game
         [SerializeField]
         private int m_speed = 2;
 
-        private bool m_isDown;
+        public bool m_isDown;
         private void Start()
         {
             m_animator.SetFloat("MoveSpeed", 0);

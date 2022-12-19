@@ -7,13 +7,11 @@ namespace Game
 	public class UIScorePanel : MonoBehaviour
 	{
 		[SerializeField]
-		private TMPro.TextMeshProUGUI[] m_scoreTexts;
+		private TMPro.TextMeshProUGUI m_scoreText;
 
 		public void SetScore(int score)
 		{
-			foreach(TMPro.TextMeshProUGUI s in m_scoreTexts)
-				if(s!=null)
-			s.text = score.ToString();
+			m_scoreText.text = score.ToString();
 		}
 	}
 }

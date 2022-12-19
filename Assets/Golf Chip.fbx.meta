@@ -6,7 +6,12 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_001__VillagerTexture_png_001
+    second: {fileID: 2100000, guid: 898f29de3f39c1d4ab62711fd77bd4b5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
