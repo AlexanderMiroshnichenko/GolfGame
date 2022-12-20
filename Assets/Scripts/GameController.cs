@@ -11,8 +11,8 @@ namespace Game
 		[SerializeField]
 		private CameraController m_cameraController;
 
-		private int m_score = 0;
-		private int m_maxScore = 0;
+		public int m_score = 0;
+		public int m_maxScore = 0;
 
 		public int maxScore => m_maxScore;
 		public int score => m_score;

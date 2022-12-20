@@ -22,17 +22,21 @@ namespace Game
 		private float m_delay = 0f;
 		private float m_maxDelay = 0f;
 		private List<GameObject> m_stones = new();
-
+		[SerializeField]
 		
+
+
 		private void OnEnable()
 		{
 			GameEvents.onCollisionStones += CheckGameOver;
 			m_gamePanel.SetActive(true);
 
 			m_maxDelay = m_settings.maxDelay;
-
+			
 			m_gameController.ResetScore();
 			m_gameController.RefreshScore(m_gameController.score);
+			
+
 		}
 
 		private void OnDisable()
@@ -57,12 +61,14 @@ namespace Game
 			}
 			m_stones.Clear();
 		}
+		
 
 		private void CheckGameOver(Stone stone1, Stone stone2)
 		{
 			if (stone1.isAffect && stone2.isAffect)
 			{
 				m_gameController.GameOver();
+				
 			}
 		}
 

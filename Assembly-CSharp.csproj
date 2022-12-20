@@ -78,6 +78,7 @@
     <Compile Include="Assets\TestJob\Scripts\ToolsChange.cs" />
     <Compile Include="Assets\TestJob\Scripts\StoneSpawner.cs" />
     <Compile Include="Assets\TestJob\Scripts\FreeCamera.cs" />
+    <Compile Include="Assets\Scripts\StonePillarController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
