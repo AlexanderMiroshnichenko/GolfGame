@@ -22,9 +22,12 @@ namespace Game
 
 		public bool isLosed;
 
+		private const string saveKey= "mainSave";
+
 		private void Start()
 		{
 			MainMenuState();
+			
 		}
 
 		private void MainMenuState()
@@ -51,6 +54,7 @@ namespace Game
 			isLosed = true;
 			MainMenuState();
 			m_cameraController.m_animator.SetTrigger("GameEnded");
+		
 		}
 
 		public void IncScore()
@@ -68,5 +72,9 @@ namespace Game
 		{
 			m_scorePanel.SetScore(score);
 		}
+
+	
+
+		
 	}
 }
