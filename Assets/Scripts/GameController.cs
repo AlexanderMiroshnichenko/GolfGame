@@ -19,6 +19,8 @@ namespace Game
 
 		[SerializeField] private MainMenuState m_mainMenuState;
 		[SerializeField] private GameState m_gameState;
+		[SerializeField] private GameObject m_gameOverText;
+		[SerializeField] private Animator m_gameOverAnim;
 
 		public bool isLosed;
 
@@ -27,7 +29,8 @@ namespace Game
 		private void Start()
 		{
 			MainMenuState();
-			
+			Application.targetFrameRate = 30;
+			m_gameOverText.SetActive(false);
 		}
 
 		private void MainMenuState()
@@ -38,6 +41,7 @@ namespace Game
 
 		private void GameState()
 		{
+			m_gameOverText.SetActive(false);
 			m_mainMenuState.enabled = false;
 			m_gameState.enabled = true;
 		}
@@ -54,7 +58,8 @@ namespace Game
 			isLosed = true;
 			MainMenuState();
 			m_cameraController.m_animator.SetTrigger("GameEnded");
-		
+			m_gameOverText.SetActive(true);
+			m_gameOverAnim.SetTrigger("GameOver");
 		}
 
 		public void IncScore()

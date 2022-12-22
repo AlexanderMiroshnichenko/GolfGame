@@ -19,7 +19,7 @@ namespace Game
         {
             m_animator.SetFloat("MoveSpeed", 0);
         }
-        void Update()
+        void FixedUpdate()
         {
             if (m_isDown)
             {
